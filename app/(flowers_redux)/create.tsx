@@ -4,8 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { Flower } from "@/types/flowers";
-import { useFlowers, useFlowersStore } from "@/zustand/useFlowers";
-import { apiClient } from "@/lib/api-client";
+import { addFlower } from "@/store/asyncThunk/flowers.thunk";
+import { useAppDispatch } from "@/store/store";
 
 export default function FlowerForm() {
   const flowerSchema = z.object({
@@ -23,10 +23,10 @@ export default function FlowerForm() {
     },
     resolver: zodResolver(flowerSchema),
   });
-  const { addFlower } = useFlowers();
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (data: Omit<Flower, "_id">) => {
-    await addFlower(data);
+    await dispatch(addFlower(data));
     router.push("/flowers");
   };
 
