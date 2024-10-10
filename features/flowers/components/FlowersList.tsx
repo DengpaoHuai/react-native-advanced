@@ -1,15 +1,14 @@
-import { Flower } from "@/types/flowers";
-import { useFlowers, useFlowersStore } from "@/zustand/useFlowers";
 import { router } from "expo-router";
-import { FC } from "react";
 import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useFlowers } from "../api/get-flowers";
+import FlowerListSkeleton from "./FlowersListSkeleton";
 
-type FlowerListProps = {
-  flowers: Flower[];
-};
+const FlowerList = () => {
+  const { data: flowers, isLoading } = useFlowers();
 
-const FlowerList: FC<FlowerListProps> = ({ flowers }) => {
-  const { deleteFlower } = useFlowers();
+  if (isLoading) {
+    return <FlowerListSkeleton></FlowerListSkeleton>;
+  }
 
   return (
     <>
@@ -34,7 +33,7 @@ const FlowerList: FC<FlowerListProps> = ({ flowers }) => {
                   <Text>{item.description}</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      deleteFlower(item._id);
+                      // deleteFlower(item._id);
                     }}
                   >
                     <View
