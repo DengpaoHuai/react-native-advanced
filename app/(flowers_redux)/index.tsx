@@ -3,31 +3,32 @@ import FlowerListSkeleton from "@/features/flowers/components/FlowersListSkeleto
 import { apiClient } from "@/lib/api-client";
 import { setAllFlowers } from "@/store/asyncThunk/flowers.thunk";
 import { RootState, useAppDispatch } from "@/store/store";
+import { Flower } from "@/types/flowers";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Text } from "react-native";
 import { useSelector } from "react-redux";
 
-const FlowersListScreen = () => {
-  const dispatch = useAppDispatch();
-  const { flowers, isLoading, error } = useSelector(
-    (state: RootState) => state.flowers
-  );
+const getFlowers = async () => {
+  const response = await apiClient.get("/flowers");
+  return response.data;
+};
 
-  useEffect(() => {
-    apiClient.get("/flowers").then((response) => {
-      dispatch(setAllFlowers());
-    });
-  }, []);
+const FlowersListScreen = () => {
+  const { data, isLoading, error } = useQuery<Flower[]>({
+    queryKey: ["flowers"],
+    queryFn: getFlowers,
+  });
 
   if (isLoading) {
     return <FlowerListSkeleton></FlowerListSkeleton>;
   }
 
   if (error) {
-    return <Text>{error}</Text>;
+    return <Text>{error.message}</Text>;
   }
 
-  return <FlowerList flowers={flowers || []} />;
+  return <FlowerList flowers={data || []} />;
 };
 
 export default FlowersListScreen;

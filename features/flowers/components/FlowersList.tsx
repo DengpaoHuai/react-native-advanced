@@ -1,6 +1,3 @@
-import { apiClient } from "@/lib/api-client";
-import { deleteFlowerById } from "@/store/asyncThunk/flowers.thunk";
-import { useAppDispatch } from "@/store/store";
 import { Flower } from "@/types/flowers";
 import { useFlowers, useFlowersStore } from "@/zustand/useFlowers";
 import { router } from "expo-router";
