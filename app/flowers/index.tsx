@@ -1,15 +1,25 @@
 import FlowerList from "@/features/flowers/components/FlowersList";
 import FlowerListSkeleton from "@/features/flowers/components/FlowersListSkeleton";
-import useFetch from "@/hooks/useFetch";
-import { Flower } from "@/types/flowers";
-import { ActivityIndicator, Text } from "react-native";
+import { apiClient } from "@/lib/api-client";
+import { setAllFlowers } from "@/store/asyncThunk/flowers.thunk";
+import { RootState, useAppDispatch } from "@/store/store";
+import { useEffect } from "react";
+import { Text } from "react-native";
+import { useSelector } from "react-redux";
 
 const FlowersListScreen = () => {
-  const { data: flowers, loading, error } = useFetch<Flower[]>("/flowers");
+  const dispatch = useAppDispatch();
+  const { flowers, isLoading, error } = useSelector(
+    (state: RootState) => state.flowers
+  );
 
-  console.log(loading);
+  useEffect(() => {
+    apiClient.get("/flowers").then((response) => {
+      dispatch(setAllFlowers());
+    });
+  }, []);
 
-  if (loading) {
+  if (isLoading) {
     return <FlowerListSkeleton></FlowerListSkeleton>;
   }
 

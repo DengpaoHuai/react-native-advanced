@@ -5,8 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { apiClient } from "@/lib/api-client";
 import { router } from "expo-router";
 import { Flower } from "@/types/flowers";
-import { useDispatch } from "react-redux";
-import { addFlower } from "@/store/actions/flowers.actions";
 
 export default function FlowerForm() {
   const flowerSchema = z.object({
@@ -24,11 +22,10 @@ export default function FlowerForm() {
     },
     resolver: zodResolver(flowerSchema),
   });
-  const dispatch = useDispatch();
+
   const onSubmit = (data: Omit<Flower, "_id">) => {
     console.log(data);
-    apiClient.post("/flowers", data).then((response) => {
-      dispatch(addFlower(response.data));
+    apiClient.post("/flowers", data).then(() => {
       router.push("/flowers");
     });
   };

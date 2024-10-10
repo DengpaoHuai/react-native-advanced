@@ -8,7 +8,7 @@ const FlowerListSkeleton = () => {
     <>
       <View
         style={{
-          backgroundColor: "black",
+          backgroundColor: "white",
           flex: 1,
         }}
       >
