@@ -1,4 +1,6 @@
+import { apiClient } from "@/lib/api-client";
 import { Flower } from "@/types/flowers";
+import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { z } from "zod";
 
@@ -7,13 +9,23 @@ export const flowerSchema = z.object({
   description: z.string(),
 });
 
+export const addFlower = async (data: Omit<Flower, "_id">) => {
+  const response = await apiClient.post("/flowers", data);
+  return response.data;
+};
+
 export const useCreateFlower = () => {
-  const onSubmit = async (data: Omit<Flower, "_id">) => {
-    //  await addFlower(data);
-    router.push("/flowers");
-  };
+  const mutate = useMutation({
+    mutationFn: async (data: Omit<Flower, "_id">) => {
+      await addFlower(data);
+    },
+    mutationKey: ["flowers"],
+    onSuccess: () => {
+      router.push("/flowers");
+    },
+  });
 
   return {
-    onSubmit,
+    onSubmit: (data: Omit<Flower, "_id">) => mutate.mutateAsync(data),
   };
 };

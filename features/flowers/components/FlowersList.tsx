@@ -2,10 +2,11 @@ import { router } from "expo-router";
 import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useFlowers } from "../api/get-flowers";
 import FlowerListSkeleton from "./FlowersListSkeleton";
+import { useDeleteFlower } from "../api/delete-flower";
 
 const FlowerList = () => {
   const { data: flowers, isLoading } = useFlowers();
-
+  const { deleteFlower } = useDeleteFlower();
   if (isLoading) {
     return <FlowerListSkeleton></FlowerListSkeleton>;
   }
@@ -33,7 +34,9 @@ const FlowerList = () => {
                   <Text>{item.description}</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      // deleteFlower(item._id);
+                      try {
+                        deleteFlower(item._id);
+                      } catch (error) {}
                     }}
                   >
                     <View

@@ -14,6 +14,7 @@ import { QueryClient } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
 import { useConfigStore } from "@/zustand/useConfig";
+import UserContextProvider from "@/contexts/UserContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -50,12 +51,12 @@ export default function RootLayout() {
       client={queryClient}
       persistOptions={{ persister }}
     >
-      <ThemeProvider value={config.theme === "dark" ? DarkTheme : DefaultTheme}>
+      <UserContextProvider>
+         <ThemeProvider value={config.theme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{
             headerRight: () => (
               <>
-                <Text>{config.lang}</Text>
               </>
             ),
           }}
@@ -67,6 +68,8 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
+      </UserContextProvider>
+     
     </PersistQueryClientProvider>
   );
 }
