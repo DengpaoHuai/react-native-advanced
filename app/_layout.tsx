@@ -15,7 +15,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
 import { useConfigStore } from "@/zustand/useConfig";
 import UserContextProvider from "@/contexts/UserContext";
-
+import ModalContextProvider from "@/components/ui/CustomModal";
+import { schemas } from "@/schemas";
+//import { RealmProvider } from "@realm/react";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -52,24 +54,27 @@ export default function RootLayout() {
       persistOptions={{ persister }}
     >
       <UserContextProvider>
-         <ThemeProvider value={config.theme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack
-          screenOptions={{
-            headerRight: () => (
-              <>
-              </>
-            ),
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="planets" />
-          <Stack.Screen name="DemoRights" />
-          <Stack.Screen name="flowers/index" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </ThemeProvider>
+        <ModalContextProvider>
+          <ThemeProvider
+            value={config.theme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack
+              screenOptions={{
+                headerRight: () => <></>,
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="planets" />
+              <Stack.Screen name="DemoRights" />
+              <Stack.Screen name="flowers/index" />
+              <Stack.Screen name="images/create" />
+              <Stack.Screen name="images/preview" />
+              <Stack.Screen name="images/submit" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </ThemeProvider>
+        </ModalContextProvider>
       </UserContextProvider>
-     
     </PersistQueryClientProvider>
   );
 }

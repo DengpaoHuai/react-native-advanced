@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/api-client";
 import { Flower } from "@/types/flowers";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
-const getFlowers = async () => {
+export const getFlowers = async () => {
   const response = await apiClient.get("/flowers");
   return response.data as Flower[];
 };

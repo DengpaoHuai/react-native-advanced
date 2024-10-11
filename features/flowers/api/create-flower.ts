@@ -1,3 +1,4 @@
+import { useModal } from "@/components/ui/CustomModal";
 import { apiClient } from "@/lib/api-client";
 import { Flower } from "@/types/flowers";
 import { useMutation } from "@tanstack/react-query";
@@ -15,12 +16,18 @@ export const addFlower = async (data: Omit<Flower, "_id">) => {
 };
 
 export const useCreateFlower = () => {
+  const { openModal } = useModal();
   const mutate = useMutation({
     mutationFn: async (data: Omit<Flower, "_id">) => {
       await addFlower(data);
     },
     mutationKey: ["flowers"],
     onSuccess: () => {
+      openModal(
+        "Flower Created",
+        "The flower has been created successfully.",
+        () => console.log("ok")
+      );
       router.push("/flowers");
     },
   });

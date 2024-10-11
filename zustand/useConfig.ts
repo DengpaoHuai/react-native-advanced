@@ -18,12 +18,9 @@ const useConfigStore = create<ConfigStore>((set) => ({
     lang: "en",
     right: "user",
   },
-  loaded: false,
+  loaded: true,
   setConfig: () => {
-    apiClient.get("/config").then((response) => {
-      set({ config: response.data[1] });
-      set({ loaded: true });
-    });
+    // apiClient.get("/config").then((response) => {});
   },
 }));
 
